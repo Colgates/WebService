@@ -41,6 +41,7 @@ public class WebService {
     // MARK: - Async/Await Method
     @available(macOS 12.0, *)
     @available(iOS 13.0, *)
+    @available(macCatalyst 15.0, *)
     public func dataTask<T: Codable>(for resource: Resource<T>) async throws -> T {
         
         guard let request = try? createRequest(resource) else { throw NetworkError.badRequest(code: 0, error: "Bad request") }

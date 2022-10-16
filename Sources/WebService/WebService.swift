@@ -17,7 +17,7 @@ public class WebService {
             
             createSession().dataTask(with: request) { data, response, error in
                 
-                guard let data, error == nil else {
+                guard let data = data, error == nil else {
                     return completion(.failure(NetworkError.badRequest(code: 0, error: "\(String(describing: error))")))
                 }
                 

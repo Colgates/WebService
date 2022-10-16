@@ -8,8 +8,7 @@ public class WebService {
     private init() {}
     
     // MARK: - Completion Method
-    @available(macOS 12.0, *)
-    @available(iOS 13.0, *)
+    
     public func dataTask<T: Codable>(for resource: Resource<T>, completion: @escaping (Result<T, NetworkError>) -> Void ) {
         
         do {
@@ -40,8 +39,8 @@ public class WebService {
     
     // MARK: - Async/Await Method
     @available(macOS 12.0, *)
-    @available(iOS 13.0, *)
     @available(macCatalyst 15.0, *)
+    @available(iOS 13.0, *)
     public func dataTask<T: Codable>(for resource: Resource<T>) async throws -> T {
         
         guard let request = try? createRequest(resource) else { throw NetworkError.badRequest(code: 0, error: "Bad request") }
@@ -79,8 +78,8 @@ public class WebService {
             .eraseToAnyPublisher()
     }
     
-    // MARK: - Configure Session
-    fileprivate func createSession() -> URLSession {
+    // MARK: - Create Session
+    private func createSession() -> URLSession {
         let configuration = URLSessionConfiguration.default
         configuration.httpAdditionalHeaders = ["Content-Type": "application/json"]
         configuration.httpAdditionalHeaders = ["Accept": "application/json"]
@@ -89,7 +88,7 @@ public class WebService {
     }
     
     // MARK: - Create Request
-    fileprivate func createRequest<T:Codable>(_ resource: Resource<T>) throws -> URLRequest {
+    private func createRequest<T:Codable>(_ resource: Resource<T>) throws -> URLRequest {
         var request = URLRequest(url: resource.url)
         request.httpMethod = resource.method.name
         
@@ -139,5 +138,14 @@ public class WebService {
                 throw NetworkError.unknown(code: 0, error: "Unknown decoding error")
             }
         }
+    }
+    
+    public func createURL(scheme: String = "https", host: String, path: String = "", queryItems:[URLQueryItem] = []) -> URL? {
+        var components = URLComponents()
+        components.scheme = scheme
+        components.host = host
+        components.path = path
+        components.queryItems = queryItems
+        return components.url
     }
 }
